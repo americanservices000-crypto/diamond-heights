@@ -1,22 +1,19 @@
-ولا يهمك يا مؤمن، دي خطأ إملائي بسيط جداً حصل في سطر رسالة النجاح (`st.success`) بسبب تداخل الكلمات العربية مع حروف التنسيق، ومحلول في ثواني.
+حقك عليّا يا مؤمن، واضح إن ردود الشرح والشات دخلت بالغلط جوه أول سطر في الكود في جيت هاب!
 
-كل اللي عليك تعمله دلوقتي:
+عشان نحل المشكلة دي فوراً ومن غير أي لخبطة:
 
-1. ارجع لملف `app.py` على جيت هاب واضغط على علامة القلم (Edit).
-2. امسح الكود القديم كله.
-3. انسخ الكود النظيف والمضبوط تماماً اللي تحت ده والزقه مكانه.
-4. انزل اضغط على الزر الأخضر **Commit changes**.
+1. ادخل على ملف `app.py` في موقع GitHub واضغط على علامة القلم **(Edit)**.
+2. **امسح كل محتويات الصفحة بالكامل** (عشان نتأكد إن مفيش أي كلام عربي أو شرح قديم باقي).
+3. انسخ الكود الصافي تماماً اللي تحت ده (اللي فيه كود البرمجة لوحده من غير أي كلام بره الكود)، واعمل له لزق (Paste).
+4. انزل تحت واضغط على الزر الأخضر **Commit changes**.
 
-ثواني معدودة وافتح الموقع هتلاقيه اشتغل معاك زي الفل من غير أي أخطاء! 🚀
+ثواني وافتح الموقع هتلاقيه فتح معاك فوراً وزي الفل! 🚀
 
 ---
-
-#### 📋 الكود الصحيح والنهائي (`app.py`):
 
 ```python
 import streamlit as st
 
-# Page Configuration
 st.set_page_config(
     page_title="AEGEAN HEIGHTS Real Estate",
     page_icon="🏢",
@@ -24,7 +21,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling & Right-to-Left Arabic Alignment
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
@@ -70,7 +66,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Initialize Session State for Properties
 if 'properties' not in st.session_state:
     st.session_state.properties = [
         {
@@ -99,7 +94,6 @@ if 'properties' not in st.session_state:
         }
     ]
 
-# Sidebar Navigation
 st.sidebar.markdown("<h2 style='text-align: center; color: #1F4E78;'>AEGEAN HEIGHTS</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("<p style='text-align: center; color: #666;'>للإستثمار العقاري وإدارة الأملاك</p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
@@ -108,13 +102,11 @@ menu = st.sidebar.radio("القائمة الرئيسية", ["🔍 كتالوج �
 
 WHATSAPP_NUMBER = "201030464219"
 
-# 1. Catalog Page
 if menu == "🔍 كتالوج العقارات":
     st.markdown("<h1 style='text-align: center;'>الكتالوج العقاري المتميز</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #555;'>تصفح أفضل العقارات السكنية والتجارية في الإسكندرية</p>", unsafe_allow_html=True)
     st.markdown("---")
 
-    # Filters Section
     col1, col2, col3 = st.columns(3)
     
     with col1:
@@ -139,7 +131,6 @@ if menu == "🔍 كتالوج العقارات":
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Filtering Logic
     filtered_props = st.session_state.properties
     if cat_filter != "الكل":
         filtered_props = [p for p in filtered_props if p["category"] == cat_filter]
@@ -180,7 +171,6 @@ if menu == "🔍 كتالوج العقارات":
                     """, unsafe_allow_html=True)
                 st.markdown("---")
 
-# 2. About Page
 elif menu == "🏢 عن الشركة":
     st.markdown("<h1>عن شركة AEGEAN HEIGHTS</h1>", unsafe_allow_html=True)
     st.markdown("""
@@ -199,7 +189,6 @@ elif menu == "🏢 عن الشركة":
     </div>
     """, unsafe_allow_html=True)
 
-# 3. Admin Dashboard
 elif menu == "⚙️ لوحة الإدارة (Admin)":
     st.markdown("<h1>لوحة الإدارة والتحكم</h1>", unsafe_allow_html=True)
     password = st.text_input("أدخل كلمة مرور المشرف (Admin Password):", type="password")
