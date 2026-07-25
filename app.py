@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling to match professional real estate cards layout
+# Custom Styling: Luxury Black & Gold Theme with Floating WhatsApp
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
@@ -18,65 +18,118 @@ st.markdown("""
         text-align: right;
     }
     
-    .main {
-        background-color: #f8f9fa;
+    /* Luxury Black & Gold Background */
+    .stApp {
+        background-color: #0f0f0f;
+        color: #e5e5e5;
     }
     
-    /* Professional Property Card Style */
+    /* Sidebar Styling */
+    [data-testid="stSidebar"] {
+        background-color: #141414;
+        border-left: 1px solid #d4af37;
+    }
+    
+    /* Property Card Style (Black & Gold Theme) */
     .property-card {
-        background-color: #ffffff;
+        background-color: #1a1a1a;
         border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
         margin-bottom: 25px;
+        border: 1px solid #333;
         overflow: hidden;
-        border: 1px solid #eaeaea;
-        transition: transform 0.2s ease;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    @media(max-width: 768px) {
+        .property-card {
+            flex-direction: column;
+        }
+    }
+    
+    .card-image {
+        width: 35%;
+        object-fit: cover;
+        min-height: 220px;
     }
     
     .card-content {
+        width: 65%;
         padding: 20px;
+    }
+    
+    @media(max-width: 768px) {
+        .card-image, .card-content {
+            width: 100%;
+        }
     }
     
     .property-title {
         font-size: 18px;
         font-weight: 700;
-        color: #1a1a1a;
+        color: #d4af37;
         margin-bottom: 8px;
     }
     
     .property-location {
         font-size: 14px;
-        color: #666;
-        margin-bottom: 12px;
+        color: #aaa;
+        margin-bottom: 10px;
     }
     
     .property-price {
         font-size: 20px;
         font-weight: 700;
-        color: #1F4E78;
-        margin-bottom: 15px;
+        color: #f39c12;
+        margin-bottom: 12px;
     }
     
-    /* Specs Badges Container */
     .specs-container {
         display: flex;
         gap: 8px;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         flex-wrap: wrap;
     }
     
     .spec-badge {
-        background-color: #f3f4f6;
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-size: 13px;
-        color: #374151;
+        background-color: #262626;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        color: #d4af37;
         font-weight: 600;
+        border: 1px solid #444;
     }
     
     h1, h2, h3 {
-        color: #1F4E78;
+        color: #d4af37 !important;
         font-weight: 700;
+    }
+    
+    /* Floating WhatsApp Button */
+    .floating-whatsapp {
+        position: fixed;
+        bottom: 25px;
+        left: 25px;
+        background-color: #25D366;
+        color: white;
+        border-radius: 50px;
+        padding: 12px 20px;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+        z-index: 9999;
+        font-weight: bold;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        transition: transform 0.2s;
+    }
+    .floating-whatsapp:hover {
+        transform: scale(1.05);
+        color: white;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -113,17 +166,24 @@ if 'properties' not in st.session_state:
         }
     ]
 
-st.sidebar.markdown("<h2 style='text-align: center; color: #1F4E78;'>AEGEAN HEIGHTS</h2>", unsafe_allow_html=True)
-st.sidebar.markdown("<p style='text-align: center; color: #666;'>للإستثمار العقاري وإدارة الأملاك</p>", unsafe_allow_html=True)
+WHATSAPP_NUMBER = "201030464219"
+
+# Floating WhatsApp Button visible all the time
+st.markdown(f"""
+    <a href="https://wa.me/{WHATSAPP_NUMBER}?text=مرحباً، أود الاستفسار عن خدمات وعقارات شركة AEGEAN HEIGHTS" target="_blank" class="floating-whatsapp">
+        💬 تواصل معنا واتساب
+    </a>
+""", unsafe_allow_html=True)
+
+st.sidebar.markdown("<h2 style='text-align: center; color: #d4af37;'>AEGEAN HEIGHTS</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<p style='text-align: center; color: #aaa;'>للإستثمار العقاري وإدارة الأملاك</p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
 menu = st.sidebar.radio("القائمة الرئيسية", ["🔍 كتالوج العقارات", "🏢 عن الشركة", "⚙️ لوحة الإدارة (Admin)"])
 
-WHATSAPP_NUMBER = "201030464219"
-
 if menu == "🔍 كتالوج العقارات":
     st.markdown("<h1 style='text-align: center;'>الكتالوج العقاري المتميز</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #555;'>تصفح أفضل العقارات السكنية والتجارية في الإسكندرية</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #aaa;'>تصفح أفضل العقارات السكنية والتجارية في الإسكندرية</p>", unsafe_allow_html=True)
     st.markdown("---")
 
     col1, col2, col3 = st.columns(3)
@@ -159,12 +219,16 @@ if menu == "🔍 كتالوج العقارات":
         filtered_props = [p for p in filtered_props if location_filter in p["location"]]
 
     if not filtered_props:
-        st.info("لا توجد عقارات مطابقة لخيارات البحث الحالية. جرب تغيير فلاتر البحث.")
+        st.info("لا توجد عقارات مطابقة لخيارات البحث الحالية.")
     else:
         for prop in filtered_props:
+            wa_msg = f"مرحباً، مهتم بالعقار ({prop['title']} - الكود: {prop['id']} - بسعر: {prop['price']})"
+            wa_link = f"https://wa.me/{WHATSAPP_NUMBER}?text={wa_msg.replace(' ', '%20')}"
+            fb_share = f"https://www.facebook.com/sharer/sharer.php?u=https://ge.com&quote={wa_msg.replace(' ', '%20')}"
+            
             st.markdown(f"""
             <div class="property-card">
-                <img src="{prop['image']}" style="width: 100%; height: 220px; object-fit: cover;">
+                <img src="{prop['image']}" class="card-image">
                 <div class="card-content">
                     <div class="property-title">{prop['title']}</div>
                     <div class="property-location">📍 {prop['location']}</div>
@@ -174,39 +238,27 @@ if menu == "🔍 كتالوج العقارات":
                         <div class="spec-badge">🛏️ {prop['rooms']}</div>
                         <div class="spec-badge">🛁 {prop['baths']}</div>
                         <div class="spec-badge">📐 {prop['area']}</div>
-                        <div class="spec-badge">🏷️ الكود: {prop['id']}</div>
+                        <div class="spec-badge">🏷️ {prop['id']}</div>
                     </div>
                     
-                    <p style="color: #555; font-size: 14px; margin-bottom: 15px;">{prop['details']}</p>
+                    <p style="color: #ccc; font-size: 13px; margin-bottom: 12px;">{prop['details']}</p>
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <a href="{wa_link}" target="_blank" style="background-color: #25D366; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold;">💬 واتساب</a>
+                        <a href="{fb_share}" target="_blank" style="background-color: #1877F2; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold;">📘 مشاركة فيس بوك</a>
+                    </div>
                 </div>
             </div>
-            """, unsafe_allow_html=True)
-            
-            wa_message = f"مرحباً، مهتم بالعقار ({prop['title']} - الكود: {prop['id']} - بسعر: {prop['price']}) وأود الاستفسار عنه."
-            wa_link = f"https://wa.me/{WHATSAPP_NUMBER}?text={wa_message.replace(' ', '%20')}"
-            st.markdown(f"""
-                <a href="{wa_link}" target="_blank">
-                    <button style="background-color: #25D366; color: white; padding: 12px; border-radius: 10px; border: none; width: 100%; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);">
-                        💬 تواصل عبر الواتساب
-                    </button>
-                </a>
             """, unsafe_allow_html=True)
 
 elif menu == "🏢 عن الشركة":
     st.markdown("<h1>عن شركة AEGEAN HEIGHTS</h1>", unsafe_allow_html=True)
     st.markdown("""
-    <div style="background-color: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid #eaeaea;">
-        <h3>ريادتنا في سوق العقارات</h3>
-        <p>نحن في <b>AEGEAN HEIGHTS</b> نتميز بتقديم أفضل الفرص العقارية السكنية والتجارية في أرقى مناطق الإسكندرية. هدفنا هو تسهيل رحلة البحث للعملاء وتقديم خيارات استثمارية آمنة ومدروسة بعناية فائقة.</p>
+    <div style="background-color: #1a1a1a; padding: 25px; border-radius: 16px; border: 1px solid #333;">
+        <h3 style="color: #d4af37;">ريادتنا في سوق العقارات</h3>
+        <p style="color: #ccc;">نحن في <b>AEGEAN HEIGHTS</b> نتميز بتقديم أفضل الفرص العقارية السكنية والتجارية في أرقى مناطق الإسكندرية.</p>
         <br>
-        <h4>خدماتنا:</h4>
-        <ul>
-            <li>تسويق وإدارة العقارات السكنية (شقق، فيلل، شاليهات).</li>
-            <li>توفير المقرات الإدارية والتجارية (مكاتب، محلات، أراضي).</li>
-            <li>استشارات عقارية احترافية تلبي تطلعات المستثمرين.</li>
-        </ul>
-        <br>
-        <p><b>للتواصل المباشر:</b> راسلنا عبر الواتساب على الرقم: <b>+201030464219</b></p>
+        <p style="color: #d4af37;"><b>للتواصل المباشر:</b> راسلنا عبر الواتساب على الرقم: <b>+201030464219</b></p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -222,27 +274,19 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
         with tab1:
             st.subheader("إضافة عقار جديد للكتالوج")
             with st.form("add_prop_form"):
-                p_title = st.text_input("عنوان العقار (مثال: شقة بحرية تشطيب لوكس)")
+                p_title = st.text_input("عنوان العقار")
                 p_cat = st.selectbox("التصنيف الرئيسي", ["سكني", "تجاري وإداري"])
-                
-                if p_cat == "سكني":
-                    p_type = st.selectbox("نوع العقار", ["شقق", "فيلل", "شاليهات"])
-                else:
-                    p_type = st.selectbox("نوع العقار", ["مكاتب", "أدوار إدارية", "محلات", "أراضي"])
-                
-                p_loc_name = st.selectbox("منطقة الإسكندرية", [
-                    "البيطاش", "العجمي", "سموحة", "لوران", "ميامي", 
-                    "المنتزه", "سيدي بشر", "كليوباترا", "محطة الرمل", "الابراهيمية", "سبورتنج", "المندرة"
-                ])
+                p_type = st.selectbox("نوع العقار", ["شقق", "فيلل", "شاليهات", "محلات", "مكاتب"])
+                p_loc_name = st.selectbox("منطقة الإسكندرية", ["البيطاش", "العجمي", "سموحة", "لوران", "ميامي", "المنتزه", "سيدي بشر"])
                 p_loc = f"الإسكندرية • {p_loc_name}"
-                p_price = st.text_input("السعر (مثال: 1,500,000 ج.م أو 7,000 ج.م / شهرياً)")
+                p_price = st.text_input("السعر (مثال: 1,500,000 ج.م)")
                 p_area = st.text_input("المساحة (مثال: 120 م²)")
-                p_rooms = st.text_input("عدد الغرف (مثال: 3 غرف)", value="3 غرف")
-                p_baths = st.text_input("عدد الحمامات (مثال: 1 حمام)", value="1 حمام")
-                p_details = st.text_area("تفاصيل العقار والمميزات")
-                p_image = st.text_input("رابط صورة العقار (Image URL)", placeholder="https://...")
+                p_rooms = st.text_input("عدد الغرف", value="3 غرف")
+                p_baths = st.text_input("عدد الحمامات", value="1 حمام")
+                p_details = st.text_area("تفاصيل العقار")
+                p_image = st.text_input("رابط صورة العقار (Image URL)")
                 
-                submit_btn = st.form_submit_button("إضافة العقار للمنصة")
+                submit_btn = st.form_submit_button("إضافة العقار")
                 
                 if submit_btn:
                     new_id = f"DH-{len(st.session_state.properties) + 1:03d}"
@@ -261,10 +305,10 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
                         "image": p_image if p_image else "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"
                     }
                     st.session_state.properties.append(new_property)
-                    st.success(f"تمت إضافة العقار برقم الكود '{new_id}' بنجاح!")
+                    st.success("تمت إضافة العقار بنجاح!")
         
         with tab2:
-            st.subheader("حذف أو تعديل العقارات")
+            st.subheader("حذف العقارات")
             if not st.session_state.properties:
                 st.info("لا توجد عقارات مضافة حالياً.")
             else:
@@ -274,7 +318,7 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
                 if st.button("حذف العقار المختار"):
                     target_id = selected_to_delete.split(" - ")[0]
                     st.session_state.properties = [p for p in st.session_state.properties if p['id'] != target_id]
-                    st.success("تم حذف العقار بنجاح! قم بتحديث الصفحة لمشاهدة التغييرات.")
+                    st.success("تم الحذف بنجاح!")
                     st.rerun()
     elif password != "":
-        st.error("كلمة المرور غير صحيحة. (كلمة المرور الافتراضية للتجربة هي: 1234)")
+        st.error("كلمة المرور غير صحيحة (التجريبية: 1234)")
