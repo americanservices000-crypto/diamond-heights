@@ -1,3 +1,19 @@
+ولا يهمك يا مؤمن، دي خطأ إملائي بسيط جداً حصل في سطر رسالة النجاح (`st.success`) بسبب تداخل الكلمات العربية مع حروف التنسيق، ومحلول في ثواني.
+
+كل اللي عليك تعمله دلوقتي:
+
+1. ارجع لملف `app.py` على جيت هاب واضغط على علامة القلم (Edit).
+2. امسح الكود القديم كله.
+3. انسخ الكود النظيف والمضبوط تماماً اللي تحت ده والزقه مكانه.
+4. انزل اضغط على الزر الأخضر **Commit changes**.
+
+ثواني معدودة وافتح الموقع هتلاقيه اشتغل معاك زي الفل من غير أي أخطاء! 🚀
+
+---
+
+#### 📋 الكود الصحيح والنهائي (`app.py`):
+
+```python
 import streamlit as st
 
 # Page Configuration
@@ -105,7 +121,6 @@ if menu == "🔍 كتالوج العقارات":
         cat_filter = st.selectbox("التصنيف الرئيسي", ["الكل", "سكني", "تجاري وإداري"])
     
     with col2:
-        # Dynamic sub-types based on main category
         if cat_filter == "سكني":
             type_options = ["الكل", "شقق", "فيلل", "شاليهات"]
         elif cat_filter == "تجاري وإداري":
@@ -232,7 +247,7 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
                         "image": p_image if p_image else "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600"
                     }
                     st.session_state.properties.append(new_property)
-                    st.success( برقم الكود `{new_id}` بنجاح!)
+                    st.success(f"تمت إضافة العقار برقم الكود '{new_id}' بنجاح!")
         
         with tab2:
             st.subheader("حذف أو تعديل العقارات")
@@ -249,3 +264,5 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
                     st.rerun()
     elif password != "":
         st.error("كلمة المرور غير صحيحة. (كلمة المرور الافتراضية للتجربة هي: 1234)")
+
+```
