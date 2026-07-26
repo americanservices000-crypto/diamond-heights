@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling: Compact Cards Grid with Watermark/Logo Overlay
+# Custom Styling: Compact Cards Grid & Click-to-Slide Image Gallery
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
@@ -28,7 +28,7 @@ st.markdown("""
         border-left: 1px solid #d4af37;
     }
     
-    /* Compact Property Card Style with Watermark Protection */
+    /* Compact Property Card Style */
     .property-card {
         background-color: #1e1e1e;
         border-radius: 14px;
@@ -46,7 +46,6 @@ st.markdown("""
         border-color: #d4af37;
     }
     
-    /* Watermark Logo Overlay to protect property ads */
     .watermark-badge {
         position: absolute;
         top: 10px;
@@ -61,7 +60,6 @@ st.markdown("""
         z-index: 10;
         box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         backdrop-filter: blur(4px);
-        letter-spacing: 0.5px;
     }
     
     .property-content {
@@ -256,29 +254,36 @@ if menu == "🔍 كتالوج العقارات":
     if not filtered_props:
         st.info("لا توجد عقارات مطابقة لبحثك.")
     else:
-        # عرض الكروت في شبكة من 3 أعمدة
         cols = st.columns(3)
         for idx, prop in enumerate(filtered_props):
             col = cols[idx % 3]
             with col:
                 st.markdown('<div class="property-card">', unsafe_allow_html=True)
                 
-                # لوجو الشركة / العلامة المائية الثابتة على الكارت لمنع السرقة
-                st.markdown(f'''
+                # لوجو الشركة على الصورة بدون رقم الهاتف المكرر
+                st.markdown('''
                     <div class="watermark-badge">
-                        🛡️ AEGEAN HEIGHTS<br><span style="font-size:10px; color:#2ecc71;">📞 01030464219</span>
+                        🛡️ AEGEAN HEIGHTS
                     </div>
                 ''', unsafe_allow_html=True)
                 
-                # معرض الصور المصغر داخل الكارت
-                if 'images' in prop and prop['images']:
-                    img_idx = st.selectbox(
-                        f"معرض الصور ({prop['id']})", 
-                        range(len(prop['images'])), 
-                        format_func=lambda x: f"🖼️ صورة رقم {x+1} (اضغط للتغيير)",
-                        key=f"img_select_{prop['id']}_{idx}"
-                    )
-                    st.image(prop['images'][img_idx], use_container_width=True)
+                # إدارة الصور بالضغط عليها مباشرة لتغييرها بسلاسة
+                img_state_key = f"img_idx_{prop['id']}"
+                if img_state_key not in st.session_state:
+                    st.session_state[img_state_key] = 0
+                
+                current_img_idx = st.session_state[img_state_key]
+                if current_img_idx >= len(prop['images']):
+                    current_img_idx = 0
+                    st.session_state[img_state_key] = 0
+                
+                # عرض الصورة الحالية
+                st.image(prop['images'][current_img_idx], use_container_width=True)
+                
+                # زر تفاعلي صغير أسفل الصورة للقلب بضغطة واحدة بدون اتجاهات معقدة
+                if st.button(f"🖼️ اضغط لقلب الصورة ({(current_img_idx + 1)}/{len(prop['images'])})", key=f"btn_flip_{prop['id']}_{idx}"):
+                    st.session_state[img_state_key] = (current_img_idx + 1) % len(prop['images'])
+                    st.rerun()
 
                 st.markdown('<div class="property-content">', unsafe_allow_html=True)
                 st.markdown(f"""
@@ -293,10 +298,12 @@ if menu == "🔍 كتالوج العقارات":
                             <span class="spec-badge">📐 {prop['area']}</span>
                             <span class="spec-badge">🏷️ {prop['id']}</span>
                         </div>
+                        <div style="font-size: 12px; color: #bbb; margin-bottom: 8px;">
+                            {prop['details']}
+                        </div>
                     </div>
                 """, unsafe_allow_html=True)
                 
-                # زر تواصل عبر واتساب المخصص بالرقم المطلوب فقط (بدون أي منصات مشاركة أخرى)
                 wa_msg = f"مرحباً AEGEAN HEIGHTS، مهتم بالعقار ({prop['title']} - الكود: {prop['id']} - بسعر: {prop['price']})"
                 wa_link = f"https://wa.me/{WHATSAPP_NUMBER}?text={wa_msg.replace(' ', '%20')}"
                 
@@ -332,6 +339,7 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
             p_area = st.text_input("المساحة", value="120 م²")
             p_rooms = st.text_input("الغرف", value="3 غرف")
             p_baths = st.text_input("الحمامات", value="1 حمام")
+            p_details = st.text_input("تفاصيل مختصرة", value="تشطيب سوبر لوكس وموقع حيوي")
             
             img1 = st.text_input("رابط الصورة 1", value="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600")
             img2 = st.text_input("رابط الصورة 2", value="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600")
@@ -345,7 +353,7 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
                 st.session_state.properties.append({
                     "id": new_id, "title": p_title, "category": p_cat, "type": p_type,
                     "location": p_loc, "price": p_price, "area": p_area, "rooms": p_rooms,
-                    "baths": p_baths, "images": imgs
+                    "baths": p_baths, "details": p_details, "images": imgs
                 })
                 st.success("تمت الإضافة بنجاح!")
     elif password != "":
