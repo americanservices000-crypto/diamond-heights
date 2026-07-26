@@ -27,55 +27,22 @@ st.markdown("""
         border-left: 1px solid #d4af37;
     }
     
+    /* تصميم الكارت بشكل نظيف ومتناسق تماماً */
     .property-card {
         background-color: #1e1e1e;
-        border-radius: 14px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        margin-bottom: 20px;
+        border-radius: 12px;
         border: 1px solid #332d11;
-        overflow: hidden;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-    
-    .property-card:hover {
-        border-color: #d4af37;
-    }
-    
-    .watermark-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: rgba(20, 20, 20, 0.85);
-        color: #d4af37;
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-size: 11px;
-        font-weight: 700;
-        border: 1px solid #d4af37;
-        z-index: 10;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        backdrop-filter: blur(4px);
-    }
-    
-    .property-content {
-        padding: 14px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        flex-grow: 1;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     
     .property-title {
         font-size: 16px;
         font-weight: 700;
         color: #ffffff;
+        margin-top: 10px;
         margin-bottom: 5px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     
     .property-location {
@@ -91,9 +58,16 @@ st.markdown("""
         margin-bottom: 10px;
     }
     
-    .specs-row {
+    .property-details {
+        font-size: 13px;
+        color: #ccc;
+        margin-bottom: 12px;
+        line-height: 1.5;
+    }
+    
+    .specs-container {
         display: flex;
-        gap: 6px;
+        gap: 8px;
         margin-bottom: 12px;
         flex-wrap: wrap;
     }
@@ -101,7 +75,7 @@ st.markdown("""
     .spec-badge {
         background-color: #2a2a2a;
         padding: 4px 10px;
-        border-radius: 8px;
+        border-radius: 6px;
         font-size: 11px;
         color: #d4af37;
         font-weight: 600;
@@ -146,7 +120,7 @@ st.markdown("""
         font-weight: bold;
         font-size: 13px;
         gap: 8px;
-        margin-top: 10px;
+        width: 100%;
         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
     .whatsapp-btn:hover {
@@ -171,8 +145,7 @@ if 'properties' not in st.session_state:
             "details": "شقة بحرية بالكامل، قريبة من الخدمات الرئيسية، الدور الثالث.",
             "images": [
                 "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600",
-                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600",
-                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600"
+                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"
             ]
         },
         {
@@ -252,38 +225,33 @@ if menu == "🔍 كتالوج العقارات":
         for idx, prop in enumerate(filtered_props):
             col = cols[idx % 3]
             with col:
+                # فتح حاوية الكارت الموحدة
                 st.markdown('<div class="property-card">', unsafe_allow_html=True)
                 
-                st.markdown('''
-                    <div class="watermark-badge">
-                        🛡️ Diamond Heights
-                    </div>
-                ''', unsafe_allow_html=True)
-                
-                # معرض صور Streamlit القياسي والنظيف بدون أزرار إضافية
+                # عرض الصور بشكل نظيف داخل الـ container الطبيعي
                 if 'images' in prop and prop['images']:
                     for img in prop['images']:
                         st.image(img, use_container_width=True)
-
-                st.markdown('<div class="property-content">', unsafe_allow_html=True)
+                
+                # تفاصيل العقار داخل نفس الكارت بانتظام
                 st.markdown(f"""
-                    <div>
-                        <div class="property-title">{prop['title']}</div>
-                        <div class="property-location">📍 {prop['location']}</div>
-                        <div class="property-price">{prop['price']}</div>
-                        
-                        <div class="specs-row">
-                            <span class="spec-badge">🛏️ {prop['rooms']}</span>
-                            <span class="spec-badge">🛁 {prop['baths']}</span>
-                            <span class="spec-badge">📐 {prop['area']}</span>
-                        </div>
-                        <div style="font-size: 13px; color: #ccc; margin-bottom: 10px; line-height: 1.5;">
-                            {prop['details']}
-                        </div>
+                    <div class="property-title">{prop['title']}</div>
+                    <div class="property-location">📍 {prop['location']}</div>
+                    <div class="property-price">{prop['price']}</div>
+                    
+                    <div class="specs-container">
+                        <span class="spec-badge">🛏️ {prop['rooms']}</span>
+                        <span class="spec-badge">🛁 {prop['baths']}</span>
+                        <span class="spec-badge">📐 {prop['area']}</span>
+                        <span class="spec-badge">🏷️ {prop['id']}</span>
+                    </div>
+                    
+                    <div class="property-details">
+                        {prop['details']}
                     </div>
                 """, unsafe_allow_html=True)
                 
-                wa_msg = f"مرحباً Diamond Heights، مهتم بالعقار ({prop['title']} - بسعر: {prop['price']})"
+                wa_msg = f"مرحباً Diamond Heights، مهتم بالعقار ({prop['title']} - كود: {prop['id']} - بسعر: {prop['price']})"
                 wa_link = f"https://wa.me/{WHATSAPP_NUMBER}?text={wa_msg.replace(' ', '%20')}"
                 
                 st.markdown(f"""
@@ -292,7 +260,8 @@ if menu == "🔍 كتالوج العقارات":
                     </a>
                 """, unsafe_allow_html=True)
                 
-                st.markdown('</div></div>', unsafe_allow_html=True)
+                # إغلاق الكارت
+                st.markdown('</div>', unsafe_allow_html=True)
 
 elif menu == "🏢 عن الشركة":
     st.markdown("<h1>عن شركة Diamond Heights Real Estate</h1>", unsafe_allow_html=True)
