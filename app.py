@@ -145,8 +145,7 @@ if 'properties' not in st.session_state:
             "details": "شقة بحرية بالكامل، قريبة من الخدمات الرئيسية، الدور الثالث.",
             "images": [
                 "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600",
-                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600",
-                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600"
+                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"
             ]
         },
         {
@@ -161,24 +160,7 @@ if 'properties' not in st.session_state:
             "baths": "1 حمام",
             "details": "محل تجاري حيوي في منطقة تجارية نشطة، واجهة زجاجية.",
             "images": [
-                "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600",
-                "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600"
-            ]
-        },
-        {
-            "id": "DH-003",
-            "title": "فيلا مستقلة بحمام سباحة",
-            "category": "سكني",
-            "type": "فيلل",
-            "location": "الإسكندرية • العجمي",
-            "price": "4,200,000 ج.م",
-            "area": "350 م²",
-            "rooms": "5 غرف",
-            "baths": "4 حمام",
-            "details": "فيلا فاخرة تشطيب خاص مع حديقة واسعة وجراج.",
-            "images": [
-                "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600",
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600"
+                "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600"
             ]
         }
     ]
@@ -228,7 +210,6 @@ if menu == "🔍 كتالوج العقارات":
             with col:
                 st.markdown('<div class="property-card">', unsafe_allow_html=True)
                 
-                # نظام إدارة الصور داخل الكارت بصورة واحدة وزر تقليب نظيف
                 img_key = f"img_idx_{prop['id']}"
                 if img_key not in st.session_state:
                     st.session_state[img_key] = 0
@@ -241,7 +222,7 @@ if menu == "🔍 كتالوج العقارات":
                 st.image(prop['images'][current_img], use_container_width=True)
                 
                 if len(prop['images']) > 1:
-                    if st.button(f"🖼️ عرض الصورة التالية ({current_img + 1}/{len(prop['images'])})", key=f"btn_next_{prop['id']}_{idx}I"):
+                    if st.button(f"🖼️ عرض الصورة التالية ({current_img + 1}/{len(prop['images'])})", key=f"btn_next_{prop['id']}_{idx}"):
                         st.session_state[img_key] = (current_img + 1) % len(prop['images'])
                         st.rerun()
 
@@ -299,16 +280,25 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
             p_baths = st.text_input("الحمامات", value="1 حمام")
             p_details = st.text_area("تفاصيل العقار", value="شقة بحرية بالكامل، قريبة من الخدمات الرئيسية.")
             
-            img1 = st.text_input("رابط الصورة 1", value="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600")
-            img2 = st.text_input("رابط الصورة 2", value="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600")
+            # رفع الصور مباشرة من الموبايل وبأي عدد تختاره
+            uploaded_files = st.file_uploader("اختر صور العقار من الموبايل (يمكنك اختيار أكثر من صورة)", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
             
             if st.form_submit_button("إضافة العقار"):
                 new_id = f"DH-{len(st.session_state.properties) + 1:03d}"
+                
+                # تجهيز الصور المرفوعة أو وضع صورة افتراضية في حال لم يرفع المستخدم صور
+                img_list = []
+                if uploaded_files:
+                    for uploaded_file in uploaded_files:
+                        img_list.append(uploaded_file)
+                else:
+                    img_list = ["https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600"]
+                
                 st.session_state.properties.append({
                     "id": new_id, "title": p_title, "category": p_cat, "type": p_type,
                     "location": p_loc, "price": p_price, "area": p_area, "rooms": p_rooms,
-                    "baths": p_baths, "details": p_details, "images": [img1, img2]
+                    "baths": p_baths, "details": p_details, "images": img_list
                 })
-                st.success("تمت الإضافة بنجاح!")
+                st.success("تمت إضافة العقار ورفع الصور بنجاح!")
     elif password != "":
         st.error("كلمة المرور خطأ (تجريبي: 1234)")
