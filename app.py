@@ -1,13 +1,12 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="AEGEAN HEIGHTS",
+    page_title="Diamond Heights Real Estate",
     page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom Styling: Compact Cards Grid & Click-to-Slide Image Gallery
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
@@ -28,7 +27,6 @@ st.markdown("""
         border-left: 1px solid #d4af37;
     }
     
-    /* Compact Property Card Style */
     .property-card {
         background-color: #1e1e1e;
         border-radius: 14px;
@@ -161,7 +159,7 @@ st.markdown("""
 if 'properties' not in st.session_state:
     st.session_state.properties = [
         {
-            "id": "AEG-001",
+            "id": "DH-001",
             "title": "شقة سكنية مميزة تشطيب سوبر لوكس",
             "category": "سكني",
             "type": "شقق",
@@ -174,12 +172,11 @@ if 'properties' not in st.session_state:
             "images": [
                 "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600",
                 "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600",
-                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600",
-                "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"
+                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600"
             ]
         },
         {
-            "id": "AEG-002",
+            "id": "DH-002",
             "title": "محل تجاري واجهة واسعة",
             "category": "تجاري وإداري",
             "type": "محلات",
@@ -191,12 +188,11 @@ if 'properties' not in st.session_state:
             "details": "محل تجاري حيوي في منطقة تجارية نشطة، واجهة زجاجية.",
             "images": [
                 "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600",
-                "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600",
-                "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=600"
+                "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600"
             ]
         },
         {
-            "id": "AEG-003",
+            "id": "DH-003",
             "title": "فيلا مستقلة بحمام سباحة",
             "category": "سكني",
             "type": "فيلل",
@@ -208,29 +204,27 @@ if 'properties' not in st.session_state:
             "details": "فيلا فاخرة تشطيب خاص مع حديقة واسعة وجراج.",
             "images": [
                 "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600",
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600",
-                "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600"
+                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600"
             ]
         }
     ]
 
 WHATSAPP_NUMBER = "201030464219"
 
-# Floating WhatsApp
 st.markdown(f"""
-    <a href="https://wa.me/{WHATSAPP_NUMBER}?text=مرحباً، أود الاستفسار عن عقارات AEGEAN HEIGHTS" target="_blank" class="floating-whatsapp">
+    <a href="https://wa.me/{WHATSAPP_NUMBER}?text=مرحباً، أود الاستفسار عن عقارات Diamond Heights Real Estate" target="_blank" class="floating-whatsapp">
         💬 واتساب
     </a>
 """, unsafe_allow_html=True)
 
-st.sidebar.markdown("<h2 style='text-align: center; color: #d4af37;'>AEGEAN HEIGHTS</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 style='text-align: center; color: #d4af37;'>Diamond Heights</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("<p style='text-align: center; color: #aaa;'>Real Estate Management</p>", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
 menu = st.sidebar.radio("القائمة الرئيسية", ["🔍 كتالوج العقارات", "🏢 عن الشركة", "⚙️ لوحة الإدارة (Admin)"])
 
 if menu == "🔍 كتالوج العقارات":
-    st.markdown("<h1 style='text-align: center; font-size: 26px;'>كتالوج العقارات - AEGEAN HEIGHTS</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 26px;'>كتالوج العقارات - Diamond Heights Real Estate</h1>", unsafe_allow_html=True)
     st.markdown("---")
 
     col_f1, col_f2, col_f3 = st.columns(3)
@@ -260,30 +254,16 @@ if menu == "🔍 كتالوج العقارات":
             with col:
                 st.markdown('<div class="property-card">', unsafe_allow_html=True)
                 
-                # لوجو الشركة على الصورة بدون رقم الهاتف المكرر
                 st.markdown('''
                     <div class="watermark-badge">
-                        🛡️ AEGEAN HEIGHTS
+                        🛡️ Diamond Heights
                     </div>
                 ''', unsafe_allow_html=True)
                 
-                # إدارة الصور بالضغط عليها مباشرة لتغييرها بسلاسة
-                img_state_key = f"img_idx_{prop['id']}"
-                if img_state_key not in st.session_state:
-                    st.session_state[img_state_key] = 0
-                
-                current_img_idx = st.session_state[img_state_key]
-                if current_img_idx >= len(prop['images']):
-                    current_img_idx = 0
-                    st.session_state[img_state_key] = 0
-                
-                # عرض الصورة الحالية
-                st.image(prop['images'][current_img_idx], use_container_width=True)
-                
-                # زر تفاعلي صغير أسفل الصورة للقلب بضغطة واحدة بدون اتجاهات معقدة
-                if st.button(f"🖼️ اضغط لقلب الصورة ({(current_img_idx + 1)}/{len(prop['images'])})", key=f"btn_flip_{prop['id']}_{idx}"):
-                    st.session_state[img_state_key] = (current_img_idx + 1) % len(prop['images'])
-                    st.rerun()
+                # معرض صور Streamlit القياسي والنظيف بدون أزرار إضافية
+                if 'images' in prop and prop['images']:
+                    for img in prop['images']:
+                        st.image(img, use_container_width=True)
 
                 st.markdown('<div class="property-content">', unsafe_allow_html=True)
                 st.markdown(f"""
@@ -296,15 +276,14 @@ if menu == "🔍 كتالوج العقارات":
                             <span class="spec-badge">🛏️ {prop['rooms']}</span>
                             <span class="spec-badge">🛁 {prop['baths']}</span>
                             <span class="spec-badge">📐 {prop['area']}</span>
-                            <span class="spec-badge">🏷️ {prop['id']}</span>
                         </div>
-                        <div style="font-size: 12px; color: #bbb; margin-bottom: 8px;">
+                        <div style="font-size: 13px; color: #ccc; margin-bottom: 10px; line-height: 1.5;">
                             {prop['details']}
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
                 
-                wa_msg = f"مرحباً AEGEAN HEIGHTS، مهتم بالعقار ({prop['title']} - الكود: {prop['id']} - بسعر: {prop['price']})"
+                wa_msg = f"مرحباً Diamond Heights، مهتم بالعقار ({prop['title']} - بسعر: {prop['price']})"
                 wa_link = f"https://wa.me/{WHATSAPP_NUMBER}?text={wa_msg.replace(' ', '%20')}"
                 
                 st.markdown(f"""
@@ -316,10 +295,10 @@ if menu == "🔍 كتالوج العقارات":
                 st.markdown('</div></div>', unsafe_allow_html=True)
 
 elif menu == "🏢 عن الشركة":
-    st.markdown("<h1>عن شركة AEGEAN HEIGHTS</h1>", unsafe_allow_html=True)
+    st.markdown("<h1>عن شركة Diamond Heights Real Estate</h1>", unsafe_allow_html=True)
     st.markdown("""
     <div style="background-color: #1e1e1e; padding: 20px; border-radius: 12px; border: 1px solid #332d11;">
-        <p style="color: #ccc;">نحن في <b>AEGEAN HEIGHTS</b> نتميز بتقديم أفضل الفرص العقارية السكنية والتجارية في الإسكندرية.</p>
+        <p style="color: #ccc;">نحن في <b>Diamond Heights Real Estate</b> نتميز بتقديم أفضل الفرص العقارية السكنية والتجارية في الإسكندرية.</p>
         <p style="color: #d4af37;"><b>للتواصل والإدارة:</b> 01030464219</p>
     </div>
     """, unsafe_allow_html=True)
@@ -339,21 +318,17 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
             p_area = st.text_input("المساحة", value="120 م²")
             p_rooms = st.text_input("الغرف", value="3 غرف")
             p_baths = st.text_input("الحمامات", value="1 حمام")
-            p_details = st.text_input("تفاصيل مختصرة", value="تشطيب سوبر لوكس وموقع حيوي")
+            p_details = st.text_area("تفاصيل العقار", value="شقة بحرية بالكامل، قريبة من الخدمات الرئيسية.")
             
             img1 = st.text_input("رابط الصورة 1", value="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600")
             img2 = st.text_input("رابط الصورة 2", value="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600")
-            img3 = st.text_input("رابط الصورة 3 (اختياري)", value="")
             
             if st.form_submit_button("إضافة العقار"):
-                new_id = f"AEG-{len(st.session_state.properties) + 1:03d}"
-                imgs = [img1, img2]
-                if img3: imgs.append(img3)
-                
+                new_id = f"DH-{len(st.session_state.properties) + 1:03d}"
                 st.session_state.properties.append({
                     "id": new_id, "title": p_title, "category": p_cat, "type": p_type,
                     "location": p_loc, "price": p_price, "area": p_area, "rooms": p_rooms,
-                    "baths": p_baths, "details": p_details, "images": imgs
+                    "baths": p_baths, "details": p_details, "images": [img1, img2]
                 })
                 st.success("تمت الإضافة بنجاح!")
     elif password != "":
