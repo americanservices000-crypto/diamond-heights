@@ -121,11 +121,32 @@ st.markdown("""
         gap: 8px;
         width: 100%;
         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        margin-top: 10px;
+        margin-top: 8px;
     }
     .whatsapp-btn:hover {
         color: white;
         background-color: #20ba5a;
+    }
+    
+    .share-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        border-radius: 8px;
+        background-color: #128C7E;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 12px;
+        gap: 6px;
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        margin-top: 6px;
+    }
+    .share-btn:hover {
+        color: white;
+        background-color: #0f7064;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -243,12 +264,20 @@ if menu == "🔍 كتالوج العقارات":
                     </div>
                 """, unsafe_allow_html=True)
                 
+                # زر التواصل المباشر للإدارة
                 wa_msg = f"مرحباً Diamond Heights، مهتم بالعقار ({prop['title']} - كود: {prop['id']} - بسعر: {prop['price']})"
                 wa_link = f"https://wa.me/{WHATSAPP_NUMBER}?text={wa_msg.replace(' ', '%20')}"
+                
+                # زر مشاركة تفاصيل العقار كاملة
+                share_text = f"🏢 *Diamond Heights Real Estate*\n\n📌 *{prop['title']}*\n📍 الموقع: {prop['location']}\n💰 السعر: {prop['price']}\n📐 المساحة: {prop['area']}\n🛏️ الغرف: {prop['rooms']} | 🛁 الحمام: {prop['baths']}\n🏷️ كود العقار: {prop['id']}\n\n📝 *التفاصيل:* {prop['details']}\n\nللتواصل والاستعلام: wa.me/{WHATSAPP_NUMBER}"
+                share_link = f"https://api.whatsapp.com/send?text={share_text.replace(' ', '%20').replace(chr(10), '%0A')}"
                 
                 st.markdown(f"""
                     <a href="{wa_link}" target="_blank" class="whatsapp-btn">
                         🟢 تواصل عبر واتساب
+                    </a>
+                    <a href="{share_link}" target="_blank" class="share-btn">
+                        📤 مشاركة تفاصيل العقار عبر واتساب
                     </a>
                 """, unsafe_allow_html=True)
                 
@@ -280,13 +309,11 @@ elif menu == "⚙️ لوحة الإدارة (Admin)":
             p_baths = st.text_input("الحمامات", value="1 حمام")
             p_details = st.text_area("تفاصيل العقار", value="شقة بحرية بالكامل، قريبة من الخدمات الرئيسية.")
             
-            # رفع الصور مباشرة من الموبايل وبأي عدد تختاره
             uploaded_files = st.file_uploader("اختر صور العقار من الموبايل (يمكنك اختيار أكثر من صورة)", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
             
             if st.form_submit_button("إضافة العقار"):
                 new_id = f"DH-{len(st.session_state.properties) + 1:03d}"
                 
-                # تجهيز الصور المرفوعة أو وضع صورة افتراضية في حال لم يرفع المستخدم صور
                 img_list = []
                 if uploaded_files:
                     for uploaded_file in uploaded_files:
