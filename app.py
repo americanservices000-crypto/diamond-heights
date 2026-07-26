@@ -27,13 +27,12 @@ st.markdown("""
         border-left: 1px solid #d4af37;
     }
     
-    /* تصميم الكارت بشكل نظيف ومتناسق تماماً */
     .property-card {
         background-color: #1e1e1e;
         border-radius: 12px;
         border: 1px solid #332d11;
         padding: 15px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     
@@ -122,6 +121,7 @@ st.markdown("""
         gap: 8px;
         width: 100%;
         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        margin-top: 10px;
     }
     .whatsapp-btn:hover {
         color: white;
@@ -145,7 +145,8 @@ if 'properties' not in st.session_state:
             "details": "شقة بحرية بالكامل، قريبة من الخدمات الرئيسية، الدور الثالث.",
             "images": [
                 "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600",
-                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600"
+                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600",
+                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600"
             ]
         },
         {
@@ -225,15 +226,25 @@ if menu == "🔍 كتالوج العقارات":
         for idx, prop in enumerate(filtered_props):
             col = cols[idx % 3]
             with col:
-                # فتح حاوية الكارت الموحدة
                 st.markdown('<div class="property-card">', unsafe_allow_html=True)
                 
-                # عرض الصور بشكل نظيف داخل الـ container الطبيعي
-                if 'images' in prop and prop['images']:
-                    for img in prop['images']:
-                        st.image(img, use_container_width=True)
+                # نظام إدارة الصور داخل الكارت بصورة واحدة وزر تقليب نظيف
+                img_key = f"img_idx_{prop['id']}"
+                if img_key not in st.session_state:
+                    st.session_state[img_key] = 0
                 
-                # تفاصيل العقار داخل نفس الكارت بانتظام
+                current_img = st.session_state[img_key]
+                if current_img >= len(prop['images']):
+                    current_img = 0
+                    st.session_state[img_key] = 0
+                
+                st.image(prop['images'][current_img], use_container_width=True)
+                
+                if len(prop['images']) > 1:
+                    if st.button(f"🖼️ عرض الصورة التالية ({current_img + 1}/{len(prop['images'])})", key=f"btn_next_{prop['id']}_{idx}I"):
+                        st.session_state[img_key] = (current_img + 1) % len(prop['images'])
+                        st.rerun()
+
                 st.markdown(f"""
                     <div class="property-title">{prop['title']}</div>
                     <div class="property-location">📍 {prop['location']}</div>
@@ -256,11 +267,10 @@ if menu == "🔍 كتالوج العقارات":
                 
                 st.markdown(f"""
                     <a href="{wa_link}" target="_blank" class="whatsapp-btn">
-                        🟢 تواصل عبر واتساب (01030464219)
+                        🟢 تواصل عبر واتساب
                     </a>
                 """, unsafe_allow_html=True)
                 
-                # إغلاق الكارت
                 st.markdown('</div>', unsafe_allow_html=True)
 
 elif menu == "🏢 عن الشركة":
